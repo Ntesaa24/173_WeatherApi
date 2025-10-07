@@ -26,17 +26,21 @@
         }
     </style>
 </head>
-
+<body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <div class="container">
+    <h3>Lokasi</h3>
+    <input type="text" id="inputLokasi" placeholder="Masukkan lokasi">
+    <button id="btnGet">Get</button>
 
-    <h2>Lokasi:</h2>
-    <input type="text" id="inputLokasi" placeholder="Masukkan nama kota">
-    <button id="btnGet">GET</button>
+    Cuaca : <p id="lokasi"></p>
+    <hr>
+    <div id="tampilan"></div>
 
     <h3>Cuaca</h3>
     <p>Suhu Celcius = <span id="suhuC"></span> °C</p>
     <p>Suhu Fahrenheit = <span id="suhuF"></span> °F</p>
-    <p>Kelembapan = <span id="humidity"></span> %</p>
+    <p>Kelembapan = <span id="kelembapan"></span></p>
 
     <h3>Lokasi</h3>
     <p>Negara = <span id="negara"></span></p>
@@ -44,8 +48,18 @@
     <p>Kecamatan = <span id="kecamatan"></span></p>
     <p>Longitude = <span id="longitude"></span></p>
     <p>Latitude = <span id="latitude"></span></p>
+    </div>
+
+</body>
 
     <script>
+        $("#btnGet").click(function(){
+        const lokasi = $("#inputLokasi").val();
+        if(lokasi === ""){
+            alert("Masukkan lokasi terlebih dahulu!");
+            return;
+        }
+
         const urlapi ="http://api.weatherapi.com/v1/current.json?key=aeee9232678c464daea65707250710&q=Yogyakarta&aqi=no";
 
         $.ajax({
