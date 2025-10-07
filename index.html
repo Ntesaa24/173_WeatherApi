@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuaca</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,57 +30,77 @@
     </style>
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <div class="container">
-    <h3>Lokasi</h3>
-    <input type="text" id="inputLokasi" placeholder="Masukkan lokasi">
-    <button id="btnGet">Get</button>
+        <h3>Lokasi</h3>
+        <input type="text" id="inputLokasi" placeholder="Masukkan lokasi">
+        <button id="btnGet">Get</button>
 
-    Cuaca : <p id="lokasi"></p>
-    <hr>
-    <div id="tampilan"></div>
+        <p id="lokasi"></p>
+        <hr>
 
-    <h3>Cuaca</h3>
-    <p>Suhu Celcius = <span id="suhuC"></span> °C</p>
-    <p>Suhu Fahrenheit = <span id="suhuF"></span> °F</p>
-    <p>Kelembapan = <span id="kelembapan"></span></p>
+        <h3>Cuaca</h3>
+        <p>Suhu Celcius = <span id="suhuC"></span> °C</p>
+        <p>Suhu Fahrenheit = <span id="suhuF"></span> °F</p>
+        <p>Kelembapan = <span id="kelembapan"></span></p>
 
-    <h3>Lokasi</h3>
-    <p>Negara = <span id="negara"></span></p>
-    <p>Provinsi = <span id="provinsi"></span></p>
-    <p>Kecamatan = <span id="kecamatan"></span></p>
-    <p>Longitude = <span id="longitude"></span></p>
-    <p>Latitude = <span id="latitude"></span></p>
+        <h3>Lokasi</h3>
+        <p>Negara = <span id="negara"></span></p>
+        <p>Provinsi = <span id="provinsi"></span></p>
+        <p>Kecamatan = <span id="kecamatan"></span></p>
+        <p>Longitude = <span id="longitude"></span></p>
+        <p>Latitude = <span id="latitude"></span></p>
     </div>
-
-</body>
 
     <script>
         $("#btnGet").click(function(){
-        const lokasi = $("#inputLokasi").val();
-        if(lokasi === ""){
-            alert("Masukkan lokasi terlebih dahulu!");
-            return;
-        }
+            const lokasi = $("#inputLokasi").val().trim();
+            if(lokasi === ""){
+                alert("Masukkan lokasi terlebih dahulu!");
+                return;
+            }
 
-        const urlapi ="http://api.weatherapi.com/v1/current.json?key=aeee9232678c464daea65707250710&q=Yogyakarta&aqi=no";
+            const urlapi = `http://api.weatherapi.com/v1/current.json?key=aeee9232678c464daea65707250710&q=${lokasi}&aqi=no`;
 
-        $.ajax({
-            url : urlapi, 
-            method : "GET", 
-            success : function(data){
-                console.log(data);
-                const v = document.getElementById("tampilan");
-                const l = document.getElementById("lokasi");
-                let suhu = data.current.temp_c;
-                let lokasi = data.location.name;
-                v.innerHTML = suhu; 
-                l.innerHTML = lokasi;
-            },
-            fail : function(error){
-                console.log(error);
-            }, 
-        })
+            $.ajax({
+                url : urlapi,
+                method : "GET",
+                success : function(data){
+                    console.log(data);
+                    let suhuC = data.current.temp_c;
+                    let suhuF = data.current.temp_f;
+                    let kelembapan = data.current.humidity;
+                    let negara = data.location.country;
+                    let provinsi = data.location.region;
+                    let kecamatan = data.location.name;
+                    let longitude = data.location.lon;
+                    let latitude = data.location.lat;
+
+                    const suhuCelcius = document.getElementById("suhuC");
+                    const suhuFahrenheit = document.getElementById("suhuF");
+                    const hum = document.getElementById("kelembapan");
+                    const negaraEl = document.getElementById("negara");
+                    const provinsiEl = document.getElementById("provinsi");
+                    const kecamatanEl = document.getElementById("kecamatan");
+                    const lonEl = document.getElementById("longitude");
+                    const latEl = document.getElementById("latitude");
+                    const lokasiEl = document.getElementById("lokasi");
+
+                    lokasiEl.innerHTML = `<strong>${kecamatan}</strong>`;
+                    suhuCelcius.innerHTML = suhuC;
+                    suhuFahrenheit.innerHTML = suhuF;
+                    hum.innerHTML = kelembapan;
+                    negaraEl.innerHTML = negara;
+                    provinsiEl.innerHTML = provinsi;
+                    kecamatanEl.innerHTML = kecamatan;
+                    lonEl.innerHTML = longitude;
+                    latEl.innerHTML = latitude;
+                },
+                error: function(error){
+                    console.log(error);
+                    alert("Gagal mengambil data. Pastikan nama lokasi benar.");
+                }
+            });
+        });
     </script>
 </body>
 </html>
